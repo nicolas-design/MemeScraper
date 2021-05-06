@@ -10,7 +10,7 @@ const getHtml = async () => {
   );
   const body = await response.text();
   const htmlT = cheerio.load(body);
-  let dir = './memes';
+  const dir = './memes';
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
