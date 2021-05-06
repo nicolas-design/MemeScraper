@@ -10,7 +10,10 @@ const getHtml = async () => {
   );
   const body = await response.text();
   const htmlT = cheerio.load(body);
-
+  let dir = './memes';
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
   const arr = [];
 
   htmlT('img').each(function (i, element) {
@@ -23,19 +26,13 @@ const getHtml = async () => {
   for (let i = arr.length - 1; i > 9; i--) {
     arr.pop();
   }
-  console.log(arr);
   const download = function (uri, filename, callback) {
-    request.head(uri, function (err, res) {
-      console.log('content-type:', res.headers['content-type']);
-      console.log('content-length:', res.headers['content-length']);
-
+    request.head(uri, function () {
       request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
     });
   };
   for (let i = 0; i < 10; i++) {
-    download(arr[i], './memes/' + [i] + 'meme.jpg', function () {
-      console.log('done');
-    });
+    download(arr[i], './memes/' + [i] + 'meme.jpg', function () {});
   }
 };
 
